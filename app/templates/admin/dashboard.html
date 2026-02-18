@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Admin - League Site{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Admin Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5><i class="bi bi-trophy"></i> Seasons</h5>
+                <a href="{{ url_for('admin.seasons') }}" class="btn btn-outline-primary btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5><i class="bi bi-shield"></i> Teams</h5>
+                <a href="{{ url_for('admin.teams') }}" class="btn btn-outline-primary btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5><i class="bi bi-person"></i> Players</h5>
+                <a href="{{ url_for('admin.players') }}" class="btn btn-outline-primary btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5><i class="bi bi-calendar-event"></i> Fixtures</h5>
+                <a href="{{ url_for('admin.fixtures') }}" class="btn btn-outline-primary btn-sm">Schedule & Results</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5><i class="bi bi-images"></i> Gallery</h5>
+                <a href="{{ url_for('admin.gallery') }}" class="btn btn-outline-primary btn-sm">Manage Gallery</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

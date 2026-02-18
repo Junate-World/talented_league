@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Enter Result - Admin{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Enter Result: {{ match.home_team.name }} vs {{ match.away_team.name }}</h1>
+
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <h5>Score</h5>
+            <div class="row">
+                <div class="col-md-5 text-end">
+                    <label class="form-label">{{ match.home_team.name }}</label>
+                    <input type="number" name="home_goals" class="form-control form-control-lg text-center" value="{{ match.home_goals if match.is_played else 0 }}" min="0">
+                </div>
+                <div class="col-md-2 text-center align-self-center">-</div>
+                <div class="col-md-5 text-start">
+                    <label class="form-label">{{ match.away_team.name }}</label>
+                    <input type="number" name="away_goals" class="form-control form-control-lg text-center" value="{{ match.away_goals if match.is_played else 0 }}" min="0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header">Match Events (Goals, Cards, Substitutions)</div>
+        <div class="card-body">
+            <p class="text-muted small">Add events in order. Firstly, select the option of the event and click on add event. Then fill in the new fields. <br><strong>Do not fill in the first boxes but use it to generate the type of events.</strong> <br>For goals: select scorer and optionally assist, the checkbox for own goal or penalty. <br>For cards: select player. <br>For sub: select both players. <br>If error occurs, refresh the page and start all over.</p>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="add-event">+ Add Event</button>
+            <div id="events-container">
+                <div class="event-row row mb-2 align-items-end">
+                    <div class="col-md-2">
+                        <label class="form-label">Type</label>
+                        <select name="event_0_type" class="form-select form-select-sm event-type">
+                            <option value="">--</option>
+                            <option value="goal">Goal</option>
+                            <option value="yellow">Yellow</option>
+                            <option value="red">Red</option>
+                            <option value="substitution">Substitution</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Min</label>
+                        <input type="number" name="event_0_minute" class="form-control form-control-sm" min="0">
+                    </div>
+                    <div class="col-md-2 goal-fields" style="display:none;">
+                        <label class="form-label">Scorer</label>
+                        <select name="event_0_goal_scorer_id" class="form-select form-select-sm">
+                            <option value="">--</option>
+                            {% for p in home_players %}<option value="{{ p.id }}">{{ p.full_name }} ({{ match.home_team.name }})</option>{% endfor %}
+                            {% for p in away_players %}<option value="{{ p.id }}">{{ p.full_name }} ({{ match.away_team.name }})</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 goal-fields" style="display:none;">
+                        <label class="form-label">Assist</label>
+                        <select name="event_0_assist_id" class="form-select form-select-sm">
+                            <option value="">--</option>
+                            {% for p in home_players %}<option value="{{ p.id }}">{{ p.full_name }}</option>{% endfor %}
+                            {% for p in away_players %}<option value="{{ p.id }}">{{ p.full_name }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-1 goal-fields" style="display:none;">
+                        <label class="form-label">Penalty</label>
+                        <div class="form-check">
+                            <input type="checkbox" name="event_0_is_penalty" class="form-check-input" id="event_0_is_penalty">
+                            <label class="form-check-label" for="event_0_is_penalty"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 goal-fields" style="display:none;">
+                        <label class="form-label">Own Goal</label>
+                        <div class="form-check">
+                            <input type="checkbox" name="event_0_is_own_goal" class="form-check-input" id="event_0_is_own_goal">
+                            <label class="form-check-label" for="event_0_is_own_goal"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 card-fields" style="display:none;">
+                        <label class="form-label">Player</label>
+                        <select name="event_0_player_id" class="form-select form-select-sm">
+                            <option value="">--</option>
+                            {% for p in home_players %}<option value="{{ p.id }}">{{ p.full_name }}</option>{% endfor %}
+                            {% for p in away_players %}<option value="{{ p.id }}">{{ p.full_name }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 substitution-fields" style="display:none;">
+                        <label class="form-label">Player Off</label>
+                        <select name="event_0_player_off_id" class="form-select form-select-sm">
+                            <option value="">--</option>
+                            {% for p in home_players %}<option value="{{ p.id }}">{{ p.full_name }} ({{ match.home_team.name }})</option>{% endfor %}
+                            {% for p in away_players %}<option value="{{ p.id }}">{{ p.full_name }} ({{ match.away_team.name }})</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 substitution-fields" style="display:none;">
+                        <label class="form-label">Player On</label>
+                        <select name="event_0_player_on_id" class="form-select form-select-sm">
+                            <option value="">--</option>
+                            {% for p in home_players %}<option value="{{ p.id }}">{{ p.full_name }} ({{ match.home_team.name }})</option>{% endfor %}
+                            {% for p in away_players %}<option value="{{ p.id }}">{{ p.full_name }} ({{ match.away_team.name }})</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Result</button>
+    <a href="{{ url_for('admin.fixtures') }}" class="btn btn-secondary">Cancel</a>
+</form>
+
+<script>
+let eventIndex = 1;
+document.getElementById('add-event').addEventListener('click', function() {
+    const container = document.getElementById('events-container');
+    const tmpl = container.querySelector('.event-row').cloneNode(true);
+    tmpl.querySelectorAll('input, select').forEach(el => {
+        el.name = el.name.replace(/event_\d+/, 'event_' + eventIndex);
+        if (el.type === 'number') el.value = '';
+        else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+    });
+    container.appendChild(tmpl);
+    eventIndex++;
+});
+document.querySelectorAll('.event-type').forEach(sel => {
+    sel.addEventListener('change', function() {
+        const row = this.closest('.event-row');
+        row.querySelectorAll('.goal-fields, .card-fields, .substitution-fields').forEach(f => f.style.display = 'none');
+        if (this.value === 'goal') row.querySelectorAll('.goal-fields').forEach(f => f.style.display = 'block');
+        else if (['yellow','red'].includes(this.value)) row.querySelectorAll('.card-fields').forEach(f => f.style.display = 'block');
+        else if (this.value === 'substitution') row.querySelectorAll('.substitution-fields').forEach(f => f.style.display = 'block');
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Fixtures - League Site{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+    Fixtures & Results
+    {% if season %}<small class="text-muted">{{ season.name }}</small>{% endif %}
+</h1>
+
+{% if by_matchday %}
+{% for matchday in by_matchday.keys()|sort %}
+<div class="card shadow mb-4">
+    <div class="card-header">Matchday {{ matchday }}</div>
+    <div class="card-body p-0">
+        <ul class="list-group list-group-flush">
+            {% for m in by_matchday[matchday] %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{{ url_for('matches.detail', match_id=m.id) }}" class="text-decoration-none text-dark">
+                    {{ m.home_team.name }} vs {{ m.away_team.name }}
+                    <small class="text-muted">{{ m.kickoff.strftime('%d %b %H:%M') if m.kickoff else '' }}</small>
+                </a>
+                <span class="badge bg-{% if m.is_played %}secondary{% else %}primary{% endif %} rounded-pill">
+                    {{ m.score_display }}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-info">No fixtures. Add a season and schedule matches.</div>
+{% endif %}
+{% endblock %}

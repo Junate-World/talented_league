@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Welcome - League Site{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero {
+        background: linear-gradient(135deg, var(--league-primary) 0%, #5c1b5e 50%, #2d0a2e 100%);
+        color: #fff;
+        padding: 5rem 0;
+        border-radius: 1rem;
+        margin-bottom: 3rem;
+    }
+    .hero h1 { font-size: 3rem; font-weight: 800; }
+    .hero .lead { font-size: 1.25rem; opacity: 0.95; }
+    .feature-card {
+        border: none;
+        border-radius: 1rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0.5rem 2rem rgba(56, 0, 60, 0.15);
+    }
+    .feature-icon {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, var(--league-secondary), #00cc6a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #38003c;
+    }
+    .cta-section {
+        background: linear-gradient(135deg, rgba(0, 255, 133, 0.1), rgba(56, 0, 60, 0.05));
+        border-radius: 1rem;
+        padding: 3rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero text-center">
+    <h1 class="mb-3">The Beautiful Game</h1>
+    <p class="lead mb-4">Every goal. Every assist. Every moment of glory. Follow the action from the pitch to the podium.</p>
+    <a href="{{ url_for('league.table') }}" class="btn btn-lg px-4" style="background: var(--league-secondary); color: var(--league-primary); font-weight: 600;">
+        View League Table <i class="bi bi-trophy-fill ms-2"></i>
+    </a>
+</div>
+
+<section class="mb-5">
+    <h2 class="text-center mb-4 fw-bold">Why Fans Love This League</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card feature-card h-100 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-trophy fs-2"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Live Standings</h5>
+                    <p class="card-text text-muted">Watch the race for the title unfold. Auto-calculated standings with goals, points, and form—updated as results roll in.</p>
+                    <a href="{{ url_for('league.table') }}" class="btn btn-outline-primary btn-sm">See Table</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card h-100 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-calendar-event fs-2"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Fixtures & Results</h5>
+                    <p class="card-text text-muted">Never miss a matchday. Browse the full fixture list, catch up on results, and relive the drama with match events.</p>
+                    <a href="{{ url_for('matches.list_matches') }}" class="btn btn-outline-primary btn-sm">View Fixtures</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card h-100 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-bar-chart-fill fs-2"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Player Statistics</h5>
+                    <p class="card-text text-muted">Top scorers, assists, clean sheets—the numbers tell the story. Dive into stats for every player and team.</p>
+                    <a href="{{ url_for('league.statistics') }}" class="btn btn-outline-primary btn-sm">Explore Stats</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section text-center">
+    <h3 class="fw-bold mb-3">Ready to Dive In?</h3>
+    <p class="text-muted mb-4">Explore teams, follow your favourites, and stay on top of every twist and turn.</p>
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <a href="{{ url_for('league.table') }}" class="btn btn-primary px-4"><i class="bi bi-trophy me-2"></i>League Table</a>
+        <a href="{{ url_for('matches.list_matches') }}" class="btn btn-outline-primary px-4"><i class="bi bi-calendar3 me-2"></i>Fixtures</a>
+        <a href="{{ url_for('league.statistics') }}" class="btn btn-outline-primary px-4"><i class="bi bi-graph-up me-2"></i>Statistics</a>
+    </div>
+</section>
+{% endblock %}

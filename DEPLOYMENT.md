@@ -1,0 +1,147 @@
+# Deployment Guide - League Site
+
+## GitHub Setup
+
+1. **Initialize Git Repository**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit - League Site application"
+   ```
+
+2. **Create GitHub Repository**
+   - Go to GitHub and create new repository named `league-site`
+   - Copy the remote URL
+
+3. **Push to GitHub**
+   ```bash
+   git remote add origin https://github.com/yourusername/league-site.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+## Render Deployment
+
+### Environment Variables Required
+Set these in Render Dashboard > Environment:
+
+1. **SECRET_KEY**
+   - Generate: `python -c "import secrets; print(secrets.token_hex(32))"`
+   - Example: `abc123def456...`
+
+2. **DATABASE_URL** (Supabase)
+   - Go to Supabase Project Settings > Database
+   - Copy Connection string (URI)
+   - Format: `postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres`
+
+3. **Cloudinary Credentials**
+   - Go to Cloudinary Dashboard > Settings > Access Keys
+   - CLOUDINARY_CLOUD_NAME: Your cloud name
+   - CLOUDINARY_API_KEY: Your API key
+   - CLOUDINARY_API_SECRET: Your API secret
+
+4. **FLASK_ENV**
+   - Value: `production`
+
+### Deployment Steps
+
+1. **Connect GitHub to Render**
+   - Sign up/login to Render
+   - Click "New +" > "Web Service"
+   - Connect GitHub repository
+   - Select `league-site` repo
+
+2. **Configure Service**
+   - Name: `league-site`
+   - Environment: `Python 3`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn --bind 0.0.0.0:$PORT run:app`
+   - Health Check Path: `/`
+
+3. **Set Environment Variables**
+   - Add all required variables from above
+   - Ensure FLASK_ENV=production
+
+4. **Deploy**
+   - Click "Create Web Service"
+   - Render will build and deploy
+
+### Alternative: Manual Render Config
+Use the provided `render-config.yaml` file:
+- Copy to `render.yaml` in your repo root
+- Render will auto-detect and use this configuration
+
+## Docker Deployment (Optional)
+
+1. **Build Docker Image**
+   ```bash
+   docker build -t league-site .
+   ```
+
+2. **Run with Docker Compose**
+   ```bash
+   docker-compose up -d
+   ```
+
+## Post-Deployment Checklist
+
+- [ ] Database migrations run automatically
+- [ ] Upload directories created
+- [ ] Environment variables set
+- [ ] Health checks passing
+- [ ] SSL certificate active
+- [ ] Custom domain configured (if needed)
+
+## Local Development Setup
+
+1. **Copy Environment File**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Initialize Database**
+   ```bash
+   flask init-db
+   ```
+
+4. **Run Development Server**
+   ```bash
+   flask run
+   ```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Database Connection Errors**
+   - Verify DATABASE_URL format
+   - Check Supabase project is active
+   - Ensure connection string uses `postgresql://` not `postgres://`
+
+2. **Build Failures**
+   - Check requirements.txt for correct versions
+   - Verify Python version compatibility
+   - Check for syntax errors
+
+3. **Environment Variables**
+   - Ensure all required variables are set
+   - Check for typos in variable names
+   - Restart service after changes
+
+4. **Static Files Not Loading**
+   - Verify upload directories exist
+   - Check file permissions
+   - Ensure Cloudinary credentials are correct
+
+## Security Notes
+
+- Never commit `.env` files to version control
+- Use strong, randomly generated SECRET_KEY
+- Rotate API keys periodically
+- Enable SSL in production
+- Keep dependencies updated

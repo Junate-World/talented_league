@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Add' if not gallery else 'Edit' }} Gallery Item - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{{ 'Add Gallery Item' if not gallery else 'Edit Gallery Item' }}</h1>
+    <a href="{{ url_for('admin.gallery') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Gallery
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title *</label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               value="{{ gallery.title if gallery else '' }}" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="highlight" {% if gallery and gallery.category == 'highlight' %}selected{% endif %}>Highlight</option>
+                            <option value="story" {% if gallery and gallery.category == 'story' %}selected{% endif %}>Story</option>
+                            <option value="event" {% if gallery and gallery.category == 'event' %}selected{% endif %}>Event</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4">{{ gallery.description if gallery else '' }}</textarea>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="match_id" class="form-label">Associated Match</label>
+                        <select class="form-select" id="match_id" name="match_id">
+                            <option value="">No match association</option>
+                            {% for match in matches %}
+                            <option value="{{ match.id }}" 
+                                    {% if gallery and gallery.match_id == match.id %}selected{% endif %}>
+                                {{ match.home_team.name }} vs {{ match.away_team.name }} - {{ match.kickoff.strftime('%Y-%m-%d') }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" 
+                                   {% if gallery and gallery.is_featured %}checked{% endif %}>
+                            <label class="form-check-label" for="is_featured">
+                                Featured Item
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label for="image" class="form-label">Image</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                <div class="form-text">
+                    Allowed formats: PNG, JPG, JPEG, GIF, WebP. Max size: 4MB.
+                    {% if gallery and gallery.image_url %}
+                    <br>Current image: <a href="{{ gallery.image_url }}" target="_blank">View</a>
+                    {% endif %}
+                </div>
+                {% if gallery and gallery.image_url %}
+                <div class="mt-2">
+                    <img src="{{ gallery.image_url }}" alt="{{ gallery.title }}" class="img-thumbnail" style="max-height: 200px;">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('admin.gallery') }}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> {{ 'Add Gallery Item' if not gallery else 'Update Gallery Item' }}
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Help</h5>
+            </div>
+            <div class="card-body">
+                <h6>Categories:</h6>
+                <ul class="small">
+                    <li><strong>Highlight:</strong> Match highlights, key moments, goals</li>
+                    <li><strong>Story:</strong> League news, player stories, events</li>
+                    <li><strong>Event:</strong> Special events, ceremonies, celebrations</li>
+                </ul>
+                
+                <h6>Featured Items:</h6>
+                <p class="small">Featured items will be displayed prominently on the gallery page and may appear in special sections.</p>
+                
+                <h6>Image Guidelines:</h6>
+                <ul class="small">
+                    <li>Use high-quality images for best results</li>
+                    <li>Recommended aspect ratio: 16:9 or 4:3</li>
+                    <li>File size should be under 4MB</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
