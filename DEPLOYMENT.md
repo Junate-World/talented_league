@@ -117,6 +117,33 @@ If Render still uses Python 3.14 despite `runtime.txt`:
 - [ ] Health checks passing
 - [ ] SSL certificate active
 - [ ] Custom domain configured (if needed)
+- [ ] **CRITICAL**: Database tables exist (run migrations manually if needed)
+
+## Database Migration Issues
+
+### If You See 500 Errors:
+The most common issue after deployment is missing database tables.
+
+**Quick Fix:**
+1. Go to Render Dashboard → Service → Shell
+2. Run: `cd /opt/render/project/src`
+3. Execute migration command (see MIGRATE_FIX.md)
+
+**Automatic Fix:**
+- Updated `render-config.yaml` includes automatic migration
+- Redeploy to run migrations during build
+
+**Manual Check:**
+```bash
+# In Render shell
+python -c "
+from app import create_app
+from flask_migrate import current
+app = create_app('production')
+with app.app_context():
+    print('Current migration:', current())
+"
+```
 
 ## Local Development Setup
 

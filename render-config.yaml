@@ -4,7 +4,9 @@ services:
   - type: web
     name: league-site
     env: python
-    buildCommand: chmod +x build.sh && ./build.sh
+    buildCommand: |
+      chmod +x build.sh && ./build.sh
+      chmod +x migrate.sh && ./migrate.sh
     startCommand: gunicorn --bind 0.0.0.0:$PORT run:app
     healthCheckPath: /
     
