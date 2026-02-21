@@ -75,8 +75,27 @@ Use the provided `render-config.yaml` file:
 
 ### Important: Python Version Compatibility
 - **Supported**: Python 3.10-3.13
-- **Not Supported**: Python 3.14 (SQLAlchemy/Alembic compatibility issues)
+- **Not Supported**: Python 3.14 (psycopg2-binary compatibility issues)
 - **Specified**: Python 3.13.0 in `runtime.txt` and `render-config.yaml`
+
+### Fixing Python 3.14 Issues on Render
+If Render still uses Python 3.14 despite `runtime.txt`:
+
+1. **Manual Version Setting**:
+   - Go to Render Dashboard > Service > Environment
+   - Add environment variable: `PYTHON_VERSION=3.13.0`
+   - Redeploy the service
+
+2. **Alternative: Use .python-version file**:
+   ```bash
+   echo "3.13.0" > .python-version
+   git add .python-version
+   git commit -m "Force Python 3.13.0"
+   ```
+
+3. **Contact Render Support**:
+   - Render may need to manually set Python version
+   - Reference the psycopg2-binary compatibility issue
 
 ## Docker Deployment (Optional)
 

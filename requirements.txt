@@ -1,5 +1,5 @@
 # League Site - Production Dependencies
-# Python 3.10-3.13 (Python 3.14 not yet supported by SQLAlchemy)
+# Python 3.10-3.14
 
 # Web framework
 Flask==3.0.0
@@ -10,7 +10,7 @@ SQLAlchemy==2.0.35
 Flask-SQLAlchemy==3.1.1
 Flask-Migrate==4.0.5
 alembic==1.13.3
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.11
 
 # Authentication & Security
 Flask-Login==0.6.3
