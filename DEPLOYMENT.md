@@ -121,13 +121,54 @@ If Render still uses Python 3.14 despite `runtime.txt`:
 
 ## Database Migration Issues
 
+### Best Solution: Run Migrations Locally
+
+**Why Local Migration is Better:**
+- ✅ Full control over the process
+- ✅ Faster than Render's free tier
+- ✅ Easy debugging and troubleshooting
+- ✅ Works with free Render tier
+
+### Step-by-Step Local Migration:
+
+1. **Get Supabase DATABASE_URL**:
+   - Supabase Dashboard → Settings → Database
+   - Copy "Connection string" (URI)
+
+2. **Run Migration Script**:
+   ```bash
+   # Windows (Recommended)
+   supabase_migrate.bat "your-database-url-here"
+   
+   # Or manual Python command
+   python -c "
+   import os
+   os.environ['DATABASE_URL'] = 'your-database-url-here'
+   from app import create_app
+   from flask_migrate import upgrade
+   app = create_app('production')
+   with app.app_context():
+       upgrade()
+   "
+   ```
+
+3. **Verify Success**:
+   - Check for "✅ Migrations completed successfully!"
+   - Confirm tables are created
+
+4. **Deploy to Render**:
+   - Push to GitHub
+   - Redeploy (no migration needed)
+   - Site should work immediately
+
 ### If You See 500 Errors:
 The most common issue after deployment is missing database tables.
 
 **Quick Fix:**
-1. Go to Render Dashboard → Service → Shell
-2. Run: `cd /opt/render/project/src`
-3. Execute migration command (see MIGRATE_FIX.md)
+1. Run local migration first (see above)
+2. Go to Render Dashboard → Service → Shell
+3. Run: `cd /opt/render/project/src`
+4. Execute migration command (see MIGRATE_FIX.md)
 
 **Automatic Fix:**
 - Updated `render-config.yaml` includes automatic migration
