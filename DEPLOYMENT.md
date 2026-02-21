@@ -57,6 +57,7 @@ Set these in Render Dashboard > Environment:
    - Build Command: `pip install -r requirements.txt`
    - Start Command: `gunicorn --bind 0.0.0.0:$PORT run:app`
    - Health Check Path: `/`
+   - **Python Version**: `3.13.0` (specified in runtime.txt)
 
 3. **Set Environment Variables**
    - Add all required variables from above
@@ -70,6 +71,12 @@ Set these in Render Dashboard > Environment:
 Use the provided `render-config.yaml` file:
 - Copy to `render.yaml` in your repo root
 - Render will auto-detect and use this configuration
+- Python version automatically set to 3.13.0
+
+### Important: Python Version Compatibility
+- **Supported**: Python 3.10-3.13
+- **Not Supported**: Python 3.14 (SQLAlchemy/Alembic compatibility issues)
+- **Specified**: Python 3.13.0 in `runtime.txt` and `render-config.yaml`
 
 ## Docker Deployment (Optional)
 
@@ -118,22 +125,27 @@ Use the provided `render-config.yaml` file:
 
 ### Common Issues
 
-1. **Database Connection Errors**
+1. **Python 3.14 Compatibility Error**
+   - **Problem**: SQLAlchemy/Alembic not compatible with Python 3.14
+   - **Solution**: Ensure `runtime.txt` specifies `python-3.13.0`
+   - **Alternative**: Set Python version manually in Render dashboard
+
+2. **Database Connection Errors**
    - Verify DATABASE_URL format
    - Check Supabase project is active
    - Ensure connection string uses `postgresql://` not `postgres://`
 
-2. **Build Failures**
+3. **Build Failures**
    - Check requirements.txt for correct versions
    - Verify Python version compatibility
    - Check for syntax errors
 
-3. **Environment Variables**
+4. **Environment Variables**
    - Ensure all required variables are set
    - Check for typos in variable names
    - Restart service after changes
 
-4. **Static Files Not Loading**
+5. **Static Files Not Loading**
    - Verify upload directories exist
    - Check file permissions
    - Ensure Cloudinary credentials are correct
