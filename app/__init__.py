@@ -101,6 +101,7 @@ def register_blueprints(app: Flask) -> None:
     from app.blueprints.players import players_bp
     from app.blueprints.matches import matches_bp
     from app.blueprints.gallery import gallery_bp
+    from app.blueprints.fan import fan_bp
     from app.api import api_bp
     
     app.register_blueprint(auth_bp, url_prefix="/auth")
@@ -110,6 +111,7 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(players_bp, url_prefix="/players")
     app.register_blueprint(matches_bp, url_prefix="/matches")
     app.register_blueprint(gallery_bp, url_prefix="/gallery")
+    app.register_blueprint(fan_bp, url_prefix="/fan")
     app.register_blueprint(api_bp, url_prefix="/api")
     
     # Home / landing page
@@ -117,6 +119,11 @@ def register_blueprints(app: Flask) -> None:
     def index():
         from flask import render_template
         return render_template("home.html")
+
+    @app.route("/about")
+    def about():
+        from flask import render_template
+        return render_template("about.html")
 
 
 def register_error_handlers(app: Flask) -> None:

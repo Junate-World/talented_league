@@ -24,7 +24,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">Talented League</a>
+            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">Golden League</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -34,7 +34,9 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('league.table') }}">Table</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('matches.list_matches') }}">Fixtures</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('gallery.index') }}">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('fan.index') }}">Fans</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('league.statistics') }}">Statistics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}">Admin</a></li>
                     {% endif %}
@@ -67,7 +69,7 @@
     </main>
 
     <footer class="container py-3 text-muted small text-center">
-        &copy; Talented League. Built by Junate World.
+        &copy; Golden League. Built by <a href="https://abel-ogbonna.vercel.app/" target="_blank" class="text-decoration-none">Junate World</a>.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

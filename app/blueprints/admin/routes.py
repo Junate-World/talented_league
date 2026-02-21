@@ -27,6 +27,7 @@ from app.models import (
     Role,
     AuditLog,
     Gallery,
+    FanComment,
 )
 from app.decorators import admin_required, stats_manager_required
 from app.services.match_service import MatchService
@@ -540,3 +541,51 @@ def delete_gallery(gallery_id):
     _audit("delete", "Gallery", gallery_id, f"Deleted gallery item {title}")
     flash("Gallery item deleted.", "success")
     return redirect(url_for("admin.gallery"))
+
+
+# --- Fan Comments ---
+
+
+@admin_bp.route("/fan-comments")
+@admin_required
+def fan_comments():
+    """Manage fan comments."""
+    page = request.args.get("page", 1, type=int)
+    search = request.args.get("q", "").strip()
+    
+    q = FanComment.query
+    
+    if search:
+        q = q.filter(
+            or_(
+                FanComment.name.ilike(f"%{search}%"),
+                FanComment.nickname.ilike(f"%{search}%"),
+                FanComment.comment.ilike(f"%{search}%")
+            )
+        )
+    
+    comments = q.order_by(FanComment.created_at.desc()).paginate(
+        page=page,
+        per_page=current_app.config["ITEMS_PER_PAGE"],
+        error_out=False,
+    )
+    
+    return render_template(
+        "admin/fan_comments.html",
+        comments=comments,
+        search=search
+    )
+
+
+@admin_bp.route("/fan-comments/<int:comment_id>/delete", methods=["POST"])
+@admin_required
+def delete_fan_comment(comment_id):
+    """Delete a fan comment."""
+    comment = FanComment.query.get_or_404(comment_id)
+    comment_text = comment.comment[:50] + "..." if len(comment.comment) > 50 else comment.comment
+    
+    db.session.delete(comment)
+    db.session.commit()
+    _audit("delete", "FanComment", comment_id, f"Deleted fan comment: {comment_text}")
+    flash("Fan comment deleted successfully.", "success")
+    return redirect(url_for("admin.fan_comments"))

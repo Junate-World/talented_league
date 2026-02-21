@@ -11,6 +11,7 @@ from app.models.match_event import MatchEvent
 from app.models.standing import Standing
 from app.models.audit_log import AuditLog
 from app.models.gallery import Gallery
+from app.models.fan_comment import FanComment
 
 __all__ = [
     "User",
@@ -23,4 +24,5 @@ __all__ = [
     "Standing",
     "AuditLog",
     "Gallery",
+    "FanComment",
 ]
