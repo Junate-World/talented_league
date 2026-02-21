@@ -16,8 +16,9 @@
                 <span>
                     {% if m.is_played %}
                     <span class="badge bg-secondary">{{ m.home_goals }}-{{ m.away_goals }}</span>
-                    <a href="{{ url_for('admin.enter_result', match_id=m.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a href="{{ url_for('admin.enter_result', match_id=m.id) }}" class="btn btn-sm btn-outline-primary">Edit Result</a>
                     {% else %}
+                    <a href="{{ url_for('admin.edit_fixture', match_id=m.id) }}" class="btn btn-sm btn-outline-warning me-2">Edit Fixture</a>
                     <a href="{{ url_for('admin.enter_result', match_id=m.id) }}" class="btn btn-sm btn-primary">Enter Result</a>
                     {% endif %}
                 </span>

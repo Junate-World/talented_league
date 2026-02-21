@@ -339,6 +339,56 @@ def add_fixture():
     return render_template("admin/fixture_form.html", seasons=seasons, teams=teams)
 
 
+@admin_bp.route("/fixtures/<int:match_id>/edit", methods=["GET", "POST"])
+@stats_manager_required
+def edit_fixture(match_id):
+    """Edit fixture details (before result entry)."""
+    match = Match.query.get_or_404(match_id)
+    
+    # Only allow editing if match hasn't been played yet
+    if match.is_played:
+        flash("Cannot edit fixture after result has been entered.", "warning")
+        return redirect(url_for("admin.fixtures"))
+    
+    seasons = Season.query.order_by(Season.start_date.desc()).all()
+    teams = Team.query.order_by(Team.name).all()
+
+    if request.method == "POST":
+        season_id = request.form.get("season_id", type=int)
+        matchday = request.form.get("matchday", type=int)
+        home_team_id = request.form.get("home_team_id", type=int)
+        away_team_id = request.form.get("away_team_id", type=int)
+        kickoff_str = request.form.get("kickoff")
+
+        if season_id and matchday and home_team_id and away_team_id and kickoff_str and home_team_id != away_team_id:
+            season = Season.query.get(season_id)
+            home_team = Team.query.get(home_team_id)
+            away_team = Team.query.get(away_team_id)
+            if season and home_team and away_team:
+                # Ensure teams are in season
+                if home_team not in season.teams:
+                    season.teams.append(home_team)
+                if away_team not in season.teams:
+                    season.teams.append(away_team)
+            
+            kickoff = datetime.strptime(kickoff_str, "%Y-%m-%dT%H:%M")
+            
+            # Update match details
+            match.season_id = season_id
+            match.matchday = matchday
+            match.home_team_id = home_team_id
+            match.away_team_id = away_team_id
+            match.kickoff = kickoff
+            
+            db.session.commit()
+            _audit("update", "Match", match.id, f"Updated fixture {matchday}")
+            flash("Fixture updated successfully.", "success")
+            return redirect(url_for("admin.fixtures"))
+        flash("Invalid fixture data.", "danger")
+
+    return render_template("admin/fixture_form.html", seasons=seasons, teams=teams, match=match)
+
+
 # --- Result Entry ---
 
 
