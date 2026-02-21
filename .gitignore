@@ -167,3 +167,7 @@ render.yaml
 *.bak
 *.backup
 *~
+
+#Admin setup
+ADMIN_SETUP.md
+create_admin.sh
