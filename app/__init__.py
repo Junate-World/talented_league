@@ -37,6 +37,15 @@ def create_app(config_name: str = "development") -> Flask:
     csrf.init_app(app)
     bcrypt.init_app(app)
     
+    # Initialize Cloudinary if in production
+    if app.config.get("USE_CLOUDINARY"):
+        import cloudinary
+        cloudinary.config(
+            cloud_name=app.config.get("CLOUDINARY_CLOUD_NAME"),
+            api_key=app.config.get("CLOUDINARY_API_KEY"),
+            api_secret=app.config.get("CLOUDINARY_API_SECRET"),
+        )
+    
     # Configure login manager
     from app.models import User
     from flask_login import set_login_view

@@ -81,25 +81,46 @@ def _upload_to_cloudinary(
     """Upload file to Cloudinary. Returns secure_url."""
     try:
         import cloudinary.uploader
-        import cloudinary.config
+        import cloudinary
+
+        # Debug: Check credentials
+        cloud_name = app.config.get("CLOUDINARY_CLOUD_NAME")
+        api_key = app.config.get("CLOUDINARY_API_KEY")
+        api_secret = app.config.get("CLOUDINARY_API_SECRET")
+        
+        print(f"Cloudinary config - Cloud: {cloud_name}, Key: {api_key[:10] if api_key else 'None'}...")
+        
+        if not all([cloud_name, api_key, api_secret]):
+            print("❌ Cloudinary credentials missing!")
+            return None
 
         cloudinary.config(
-            cloud_name=app.config["CLOUDINARY_CLOUD_NAME"],
-            api_key=app.config["CLOUDINARY_API_KEY"],
-            api_secret=app.config["CLOUDINARY_API_SECRET"],
+            cloud_name=cloud_name,
+            api_key=api_key,
+            api_secret=api_secret,
         )
 
         # folder is e.g. "team_logos" or "player_photos" (last part of path)
         cloud_folder = folder.split(os.sep)[-1] if os.sep in folder else folder
         public_id = f"{prefix}_{os.urandom(6).hex()}"
+        
+        print(f"Uploading to Cloudinary - Folder: {cloud_folder}, Public ID: {public_id}")
+        
         result = cloudinary.uploader.upload(
             file,
             folder=cloud_folder,
             public_id=public_id,
             overwrite=True,
         )
-        return result.get("secure_url")
-    except Exception:
+        
+        url = result.get("secure_url")
+        print(f"✅ Cloudinary upload successful: {url}")
+        return url
+        
+    except Exception as e:
+        print(f"❌ Cloudinary upload failed: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return None
 
 

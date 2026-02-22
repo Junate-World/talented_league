@@ -6,10 +6,6 @@ Uses environment variables for sensitive/部署-specific settings.
 import os
 from pathlib import Path
 
-#Check if environment variables are set
-print("Cloud name:", os.environ.get("CLOUDINARY_CLOUD_NAME"))
-print("API key:", os.environ.get("CLOUDINARY_API_KEY"))
-print("Secret exists:", "Yes" if os.environ.get("CLOUDINARY_API_SECRET") else "No")
 
 # Base directory for file uploads
 BASE_DIR = Path(__file__).resolve().parent.parent
