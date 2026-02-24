@@ -108,6 +108,9 @@ celerybeat.pid
 .env.test.local
 .env.production.local
 .env.staging.local
+venv/
+.venv/
+env/
 
 # Spyder project settings
 .spyderproject
