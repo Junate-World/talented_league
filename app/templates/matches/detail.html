@@ -39,7 +39,7 @@
                                 {{ e.minute }}{% if e.extra_time %}+{{ e.extra_time }}{% endif %}'
                             </span>
                             {% if e.event_type == 'goal' %}
-                                <span class="goal-icon {% if e.is_own_goal %}own-goal{% endif %}"></span>
+                                <span class="goal-icon {% if e.is_own_goal %}own-goal{% endif %}"><i class="fas fa-futbol"></i></span>
                                 {% if e.goal_scorer %}{{ e.goal_scorer.full_name }}{% if e.is_penalty %} (pen){% endif %}{% if e.is_own_goal %} (OG){% endif %}{% endif %}
                                 {% if e.assist %}<small class="text-muted">(assist: {{ e.assist.full_name }})</small>{% endif %}
                             {% elif e.event_type == 'yellow' %}
@@ -75,7 +75,7 @@
                         {% if event_player and event_player.team_id == match.away_team_id %}
                         <div class="event-item d-flex align-items-center justify-content-end">
                             {% if e.event_type == 'goal' %}
-                            <span class="goal-icon {% if e.is_own_goal %}own-goal{% endif %}"></span>
+                            <span class="goal-icon {% if e.is_own_goal %}own-goal{% endif %}"><i class="fas fa-futbol"></i></span>
                                 {% if e.assist %}<small class="text-muted me-2">({{ e.assist.full_name }} assist)</small>{% endif %}
                                 {% if e.goal_scorer %}{{ e.goal_scorer.full_name }}{% if e.is_penalty %} (pen){% endif %}{% if e.is_own_goal %} (OG){% endif %}{% endif %}
                                 <i class="bi bi-football text-success ms-2"></i>
@@ -139,7 +139,7 @@
     margin-bottom: 1rem;
 }
 
-.goal-icon {
+.gioal-icon {
     background: 
      /* Center black circle */
     radial-gradient(circle at center, 
@@ -201,6 +201,9 @@
     margin-right: 0.5rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     border: 1px solid #000;
+}
+.badge {
+    margin-right: 0.25rem;
 }
 
 @media (max-width: 768px) {
