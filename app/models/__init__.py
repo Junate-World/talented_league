@@ -12,6 +12,7 @@ from app.models.standing import Standing
 from app.models.audit_log import AuditLog
 from app.models.gallery import Gallery
 from app.models.fan_comment import FanComment
+from app.models.visitor import Visitor
 
 __all__ = [
     "User",
@@ -25,4 +26,5 @@ __all__ = [
     "AuditLog",
     "Gallery",
     "FanComment",
+    "Visitor",
 ]

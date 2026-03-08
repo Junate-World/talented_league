@@ -18,19 +18,21 @@ from app.blueprints.admin import admin_bp
 from app.extensions import db
 from sqlalchemy import or_
 from app.models import (
+    User,
+    Role,
     Season,
     Team,
     Player,
     Match,
     MatchEvent,
-    User,
-    Role,
     AuditLog,
     Gallery,
     FanComment,
+    Visitor,
 )
 from app.decorators import admin_required, stats_manager_required
 from app.services.match_service import MatchService
+from app.services.visitor_service import get_visitor_stats
 from app.utils import allowed_file, upload_image
 
 
@@ -42,6 +44,14 @@ from app.utils import allowed_file, upload_image
 def dashboard():
     """Admin dashboard."""
     return render_template("admin/dashboard.html")
+
+
+@admin_bp.route("/analytics")
+@admin_required
+def analytics():
+    """Visitor analytics dashboard."""
+    stats = get_visitor_stats()
+    return render_template("admin/analytics.html", stats=stats)
 
 
 # --- Seasons ---

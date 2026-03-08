@@ -41,30 +41,32 @@ def statistics():
 
     if team_ids:
         top_scorers = (
-            Player.query.filter(Player.team_id.in_(team_ids))
+            Player.query.filter(Player.team_id.in_(team_ids), Player.goals > 0)
             .order_by(desc(Player.goals), desc(Player.assists))
-            .limit(20)
+            .limit(10)
             .all()
         )
         top_assists = (
-            Player.query.filter(Player.team_id.in_(team_ids))
+            Player.query.filter(Player.team_id.in_(team_ids), Player.assists > 0)
             .order_by(desc(Player.assists), desc(Player.goals))
-            .limit(20)
+            .limit(10)
             .all()
         )
         clean_sheets = (
             Player.query.filter(
                 Player.team_id.in_(team_ids),
                 Player.position.in_([Player.POSITION_GOALKEEPER, Player.POSITION_DEFENDER]),
+                Player.clean_sheets > 0,
             )
             .order_by(desc(Player.clean_sheets))
-            .limit(20)
+            .limit(10)
             .all()
         )
         most_cards = (
             Player.query.filter(Player.team_id.in_(team_ids))
+            .filter((Player.yellow_cards + Player.red_cards * 2) > 0)
             .order_by(desc(Player.yellow_cards + Player.red_cards * 2))
-            .limit(20)
+            .limit(10)
             .all()
         )
 

@@ -46,6 +46,12 @@ def create_app(config_name: str = "development") -> Flask:
             api_secret=app.config.get("CLOUDINARY_API_SECRET"),
         )
     
+    # Initialize visitor tracking
+    @app.before_request
+    def track_visitor():
+        from app.services.visitor_service import track_visitor
+        track_visitor()
+    
     # Configure login manager
     from app.models import User
     from flask_login import set_login_view
