@@ -21,13 +21,15 @@
                 </div>
 
                 <div class="match-teams">
+                  <a href="{{ url_for('matches.detail', match_id=m.id) }}" class="text-decoration-none text-dark"> 
                     <div class="team">{{ m.home_team.name }}</div>
                     <div class="team">{{ m.away_team.name }}</div>
+                  </a>
                 </div>
 
                 <div class="match-score">
                   <a href="{{ url_for('matches.detail', match_id=m.id) }}" class="text-decoration-none text-dark">
-                    {{ m.score_display | safe}}
+                    {{ m.score_display1 | safe }}
                   </a>
                 </div>
             </li>
@@ -73,6 +75,7 @@
   width: 50px;
   text-align: center;
   font-weight: bold;
-}
+ }
+
 </style>
 {% endblock %}

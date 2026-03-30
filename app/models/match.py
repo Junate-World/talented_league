@@ -40,10 +40,17 @@ class Match(db.Model):
     )
     
     @property
-    def score_display(self):
+    def score_display1(self):
         """Display score or vs for unplayed matches."""
         if self.is_played and self.home_goals is not None and self.away_goals is not None:
             return f"{self.home_goals}<br>{self.away_goals}"
+        return "vs"
+    
+    @property
+    def score_display(self):
+        """Display score or vs for unplayed matches."""
+        if self.is_played and self.home_goals is not None and self.away_goals is not None:
+            return f"{self.home_goals} - {self.away_goals}"
         return "vs"
     
     def get_winner_id(self):
