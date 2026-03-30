@@ -26,7 +26,9 @@
                 </div>
 
                 <div class="match-score">
-                  <a href="{{ url_for('matches.detail', match_id=m.id) }}" class="text-decoration-none text-dark">{{ m.score_display }}</a>
+                  <a href="{{ url_for('matches.detail', match_id=m.id) }}" class="text-decoration-none text-dark">
+                    {{ m.score_display | safe}}
+                  </a>
                 </div>
             </li>
 
