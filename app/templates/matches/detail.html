@@ -5,19 +5,27 @@
 <div class="card shadow">
     <div class="card-body text-center py-5">
         <div class="row align-items-center">
-            <div class="col-md-5">
+          <h6 class="text-center">Matchday {{ match.matchday }}</h6>
+        </div>
+        <br>
+        <div class="row align-items-center junate-match">
+            
+            <div class="col-5 col-md-5">
                 <h4>{{ match.home_team.name }}</h4>
             </div>
-            <div class="col-md-2">
+            <div class="col-2 col-md-2">
                 <h2 class="mb-0">{{ match.score_display }}</h2>
-                <small class="text-muted">Matchday {{ match.matchday }}</small>
+                
             </div>
-            <div class="col-md-5">
+            <div class="col-5 col-md-5">
                 <h4>{{ match.away_team.name }}</h4>
             </div>
         </div>
-        {% if match.kickoff %}
+              
+        {% if match.score_display == "vs" %}
         <p class="text-muted mt-2">{{ match.kickoff.strftime('%A %d %B %Y, %H:%M') }}</p>
+        {% else %}
+        <p class="text-muted mt-2">Full Time</p>
         {% endif %}
     </div>
 </div>
@@ -212,6 +220,14 @@
     }
     .match-event-away .d-flex {
         justify-content: flex-start !important;
+    }
+    .junate-match {
+        flex-wrap: nowrap;
+    }
+    .junate-match h4,
+    .junate-match h2 {
+        font-size: 15px !important;
+        
     }
 }
 </style>
