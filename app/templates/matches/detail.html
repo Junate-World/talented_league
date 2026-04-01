@@ -11,14 +11,22 @@
         <div class="row align-items-center junate-match">
             
             <div class="col-5 col-md-5">
-                <h4>{{ match.home_team.name }}</h4>
+                <h4>
+                    <a href="{{ url_for('teams.profile', team_id=match.home_team.id) }}" class="text-decoration-none text-dark">
+                        {{ match.home_team.name }}
+                    </a>
+                </h4>
             </div>
             <div class="col-2 col-md-2">
                 <h2 class="mb-0">{{ match.score_display }}</h2>
                 
             </div>
             <div class="col-5 col-md-5">
-                <h4>{{ match.away_team.name }}</h4>
+                <h4>
+                    <a href="{{ url_for('teams.profile', team_id=match.away_team.id) }}" class="text-decoration-none text-dark">
+                        {{ match.away_team.name }}
+                    </a>
+                </h4>
             </div>
         </div>
               
